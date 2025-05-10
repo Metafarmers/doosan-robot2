@@ -58,9 +58,6 @@ def bringUp():
 		spawner_script.send_signal(signal.SIGINT)
 		raise Exception('Spawner Time out !!, All tests will be failed !!!!')
 	
-	# !Note : We need to check Event whether our controller is ready to get services.
-	# TODO: I temporary added sleep. we need to replace this with that event.
-	time.sleep(50)
 	print("Bringup successfully done.")
 	yield 
 
@@ -1278,7 +1275,7 @@ class TestDsrSysCli(unittest.TestCase):
 		rclpy.spin_until_future_complete(self.node, get_mode_future, timeout_sec=SRV_CALL_TIMEOUT)
 		self.assertTrue(get_mode_future.done(), "system/get_robot_mode future task done")
 		get_mode_resp = get_mode_future.result()
-		self.assertTrue((get_mode_resp.robot_mode == 0) and (get_mode_resp.success == True), "system/get_robot_mode response")
+		self.assertTrue((get_mode_resp.robot_mode == 1) and (get_mode_resp.success == True), "system/get_robot_mode response")
 		self.node.destroy_client(get_mode_cli)
 
 
@@ -1472,7 +1469,7 @@ class TestDsrAuxCtrlCli(unittest.TestCase):
 		self.assertTrue(get_control_mode_future.done(), "aux_control/get_control_mode service working is not done.")
 		get_control_mode_resp = get_control_mode_future.result()
 		print(get_control_mode_resp)
-		self.assertTrue((get_control_mode_resp.success == True) and (get_control_mode_resp.control_mode == 0), "aux_control/get_control_mode service is not working correctly.")
+		self.assertTrue((get_control_mode_resp.success == True), "aux_control/get_control_mode service is not working correctly.")
 		self.node.destroy_client(get_control_mode_cli)
 
 

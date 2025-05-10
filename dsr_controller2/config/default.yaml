@@ -1,4 +1,3 @@
-
 dsr_control_node2:
   ros__parameters:
     name:    "dsr01"

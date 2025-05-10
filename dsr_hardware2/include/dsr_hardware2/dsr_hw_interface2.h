@@ -35,8 +35,6 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************/
-#define _DEBUG_DSR_CTL      1
-
 #ifndef DSR_HARDWARE2__DR_HW_INTERFACE2_H
 #define DSR_HARDWARE2__DR_HW_INTERFACE2_H
 
@@ -217,7 +215,6 @@
 #include "../../../common2/include/DRFLEx.h"
 //TODO #include "../../../common2/include/dsr_serial.h"
 
-#define _DEBUG_DSR_CTL      0
 
 #ifndef PI
 #define PI 3.14159265359
@@ -299,7 +296,7 @@
 
 // digital I/O
 #define DR_DIO_MIN_INDEX    1
-#define DR_DIO_MAX_INDEX    16  
+#define DR_DIO_MAX_INDEX    20 // Input IO :16 -> 20 , Output IO : 16   
 
 // tool digital I/O
 #define DR_TDIO_MIN_INDEX   1
@@ -511,16 +508,7 @@ namespace dsr_hardware2{
     class HARDWARE_INTERFACE_PUBLIC DRHWInterface : public hardware_interface::SystemInterface
     {
     public:
-        std::vector<std::string> joint_names = {
-            "joint_1",
-            "joint_2",
-            "joint_3",
-            "joint_4",
-            "joint_5",
-            "joint_6"
-            };
         int m_nVersionDRCF;
-        bool init_check;
         bool m_bCommand_;
         std::array<float, NUM_JOINT> m_fCmd_;
         CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
@@ -534,16 +522,22 @@ namespace dsr_hardware2{
         /// The size of this vector is (standard_interfaces_.size() x nr_joints)
         std::vector<double> joint_position_command_;
         std::vector<double> joint_velocities_command_;
+        std::vector<double> joint_effort_command_; /* not used*/
+        std::vector<double> pre_joint_position_command_;
         std::vector<double> joint_position_;
         std::vector<double> joint_velocities_;
+        std::vector<double> joint_effort_; /* not used*/
+
         std::vector<double> ft_states_;
         std::vector<double> ft_command_;
+        std::vector<std::vector<float>> init_joint_position_command;
 
         std::unordered_map<std::string, std::vector<std::string>> joint_interfaces = {
-            {"position", {}}, {"velocity", {}}};
-        };
+            {"position", {}}, {"velocity", {}}, {"effort", {}}};
         
-
+        std::unordered_map<std::string, std::vector<std::string>> joint_comm_interfaces = {
+            {"position", {}}, {"velocity", {}}, {"effort", {}}};
+    };
 }
     class DSRInterface : public rclcpp::Node
     {
@@ -573,8 +567,6 @@ namespace dsr_hardware2{
         std::string GetRobotModel();
 
     private:
-        
-        //ROS2 bool m_bIsEmulatorMode; -> g_bIsEmulatorMode
         
         // rclcpp::Node::SharedPtr private_nh_;	
 

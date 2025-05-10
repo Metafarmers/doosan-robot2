@@ -33,10 +33,10 @@ def print_launch_configuration_value(context, *args, **kwargs):
 def generate_launch_description():
     ARGUMENTS =[ 
         DeclareLaunchArgument('name',  default_value = 'dsr01',     description = 'NAME_SPACE'     ),
-        DeclareLaunchArgument('host',  default_value = '127.0.0.1', description = 'ROBOT_IP'       ),
+        DeclareLaunchArgument('host',  default_value = '192.168.50.161', description = 'ROBOT_IP'       ),
         DeclareLaunchArgument('port',  default_value = '12345',     description = 'ROBOT_PORT'     ),
-        DeclareLaunchArgument('mode',  default_value = 'virtual',   description = 'OPERATION MODE' ),
-        DeclareLaunchArgument('model', default_value = 'm1013',     description = 'ROBOT_MODEL'    ),
+        DeclareLaunchArgument('mode',  default_value = 'real',   description = 'OPERATION MODE' ),
+        DeclareLaunchArgument('model', default_value = 'a0509',     description = 'ROBOT_MODEL'    ),
         DeclareLaunchArgument('color', default_value = 'white',     description = 'ROBOT_COLOR'    ),
         DeclareLaunchArgument('gui',   default_value = 'false',     description = 'Start RViz2'    ),
         DeclareLaunchArgument('gz',    default_value = 'false',     description = 'USE GAZEBO SIM'    ),
@@ -169,8 +169,8 @@ def generate_launch_description():
         control_node,
         robot_state_pub_node,
         robot_controller_spawner,
-        joint_state_broadcaster_spawner,
-        delay_rviz_after_joint_state_broadcaster_spawner,
+        # joint_state_broadcaster_spawner,
+        # delay_rviz_after_joint_state_broadcaster_spawner,
         # delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
     ]
 
