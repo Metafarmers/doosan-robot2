@@ -18,14 +18,6 @@
   </xacro:if>
   <xacro:a0509 namespace="$(arg namespace)"/>
 
-  <link name="manipulator_base_link" />
-  <!-- World fixed joint-->
-  <joint name="world_fixed" type="fixed">
-    <origin xyz="0 0 0" rpy="0 0 0"/>
-    <parent link="manipulator_base_link"/>
-    <child link="base_link"/>
-  </joint>
-
   <xacro:if value="${gz}">
     <xacro:include filename="$(find dsr_description2)/ros2_control/a0509.gz_ros2_control.xacro" />
     <xacro:a0509_gz_ros2_control namespace="$(arg namespace)"/>
