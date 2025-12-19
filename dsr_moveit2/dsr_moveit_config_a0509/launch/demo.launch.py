@@ -16,9 +16,9 @@ def generate_launch_description():
     
     ARGUMENTS =[ 
         DeclareLaunchArgument('name',  default_value = '',     description = 'NAME_SPACE'     ),
-        DeclareLaunchArgument('host',  default_value = '192.168.137.100', description = 'ROBOT_IP'       ),
+        DeclareLaunchArgument('host',  default_value = '192.168.50.101', description = 'ROBOT_IP'       ),
         DeclareLaunchArgument('port',  default_value = '12345',     description = 'ROBOT_PORT'     ),
-        DeclareLaunchArgument('mode',  default_value = 'real',   description = 'OPERATION MODE' ),
+        DeclareLaunchArgument('mode',  default_value = 'virtual',   description = 'OPERATION MODE' ),
         DeclareLaunchArgument('model', default_value = 'a0509',     description = 'ROBOT_MODEL'    ),
         DeclareLaunchArgument('color', default_value = 'white',     description = 'ROBOT_COLOR'    ),
         DeclareLaunchArgument('gz',    default_value = 'false',     description = 'USE GAZEBO SIM'    ),
@@ -30,7 +30,7 @@ def generate_launch_description():
     )
 
     moveit_config = (
-        MoveItConfigsBuilder("a0509")
+        MoveItConfigsBuilder("a0509", "robot_description", "dsr_moveit_config_a0509")
         .robot_description(file_path="config/a0509.urdf.xacro")
         .robot_description_semantic(file_path="config/dsr.srdf")
         .trajectory_execution(file_path="config/moveit_controllers.yaml")
@@ -81,12 +81,6 @@ def generate_launch_description():
         package="robot_state_publisher",
         executable="robot_state_publisher",
         name="robot_state_publisher",
-        remappings=[
-            (
-                "/joint_states",
-                "/dsr01/joint_states",
-            ),
-        ],
         output="both",
         parameters=[moveit_config.robot_description],
     )
@@ -110,6 +104,11 @@ def generate_launch_description():
                 ]
             ),
             ".urdf.xacro",
+            " mode:=", LaunchConfiguration('mode'),
+            " host:=", LaunchConfiguration('host'),
+            " port:=", LaunchConfiguration('port'),
+            " model:=", LaunchConfiguration('model'),
+            " update_rate:=10",
         ]
     )
 
@@ -123,9 +122,7 @@ def generate_launch_description():
     ros2_control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[ros2_controllers_path],
-
-        # parameters=[robot_description, ros2_controllers_path],
+        parameters=[robot_description, ros2_controllers_path],
         remappings=[
             ("/controller_manager/robot_description", "/robot_description"),
         ],
